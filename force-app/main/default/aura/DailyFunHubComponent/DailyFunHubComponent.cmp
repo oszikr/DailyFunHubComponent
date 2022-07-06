@@ -1,0 +1,95 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,force:lightningQuickActionWithoutHeader" 
+		access="global" controller="DailyFunHubController">
+	<lightning:overlayLibrary aura:id="overlayLib"/>
+
+	<aura:attribute name="recordId" type="Id" />
+	<aura:attribute name="showSpinner" type="Boolean" default="false"/>   
+	<aura:attribute name="state" type="String" default="DEFAULT" />
+	<aura:attribute name="msg" type="String" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+	<aura:handler event="force:refreshView" action="{!c.doInit}" />
+
+	<aura:method name="doInitMethod" action="{!c.doInit}" />
+
+	<!-- default card -->
+	<aura:if isTrue="{!v.state == 'DEFAULT'}">
+		<lightning:card>
+			<!-- card body -->
+			<aura:set attribute="title">
+				<lightning:icon iconName="utility:connected_apps" size="small"/>
+				Title
+			</aura:set>
+			<aura:set attribute="actions">
+				<!-- buttons -->
+			</aura:set>
+
+			<aura:if isTrue="{!v.msg != null}">
+				<div>
+					<ui:message title="Warning" severity="warning" closable="false">{!v.msg}</ui:message>
+				</div>
+			</aura:if>
+			
+			<!-- form -->
+			<lightning:button variant="brand" label="Todo" title="Todo" onclick="{! c.todo }" />
+
+			<div class="slds-align_absolute-center" style="height:5rem">
+				<!-- buttons -->
+			</div>
+			<!-- end of card body -->
+		</lightning:card>
+	</aura:if>
+	<!-- end of default card -->
+
+	<!-- error card -->
+	<aura:if isTrue="{!v.state == 'ERROR'}">
+		<lightning:card>
+			<!-- card body -->
+			<aura:set attribute="title">
+				<lightning:icon iconName="utility:connected_apps" size="small"/>
+				Reconfiguration
+			</aura:set>
+			<aura:set attribute="actions">
+				<lightning:button variant="brand" label="Back" title="Back" onclick="{! c.back }" />
+			</aura:set>
+			<div>
+				<ui:message title="Error" severity="error" closable="false">{!v.msg}</ui:message>
+			</div>
+			<!-- en of card body -->
+		</lightning:card>
+	</aura:if>
+	<!-- end of error card -->
+
+	<!-- finish card -->
+	<aura:if isTrue="{!v.state == 'FINISH'}">
+		<lightning:card>
+			<!-- card body -->
+			<aura:set attribute="title">
+				<lightning:icon iconName="utility:connected_apps" size="small"/>
+				Title
+			</aura:set>
+			<div>
+				<ui:message title="Confirmation" severity="confirm" closable="false">{!v.msg}</ui:message>
+				<ui:message title="Information" severity="info" closable="false">Success message.</ui:message>
+			</div>
+			<!-- end of card body -->
+		</lightning:card>
+	</aura:if>
+	<!-- end of finish card -->
+
+	<!-- spinner -->
+	<aura:html tag="style">
+		.slds-spinner_container {
+			background-color: transparent;
+			position: absolute;
+		}
+		.lightpadding {
+			padding: 8px;
+		}
+	</aura:html>
+	<aura:if isTrue="{!v.showSpinner}">
+		<div class="screencont"><lightning:spinner/></div>
+	</aura:if>
+	<!-- end of spinner -->
+
+</aura:component>
